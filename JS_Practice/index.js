@@ -15,11 +15,13 @@ function SignUp() {
     var isExist = false;
     
     var Candidates=[];
-    // var Candidate=[{name:'test',pwd:'test',comments:['test comments']}];
+    // var Candidate=[{name:'test',pwd:'git test',comments:['test comments']}];
     // Candidates.push(Candidate);
 
     var existingData='';
     
+    //comments
+
     if (localStorage.getItem("CandStorage") != null) {
        // isExist = true;
           //getting Exising values
