@@ -22,6 +22,8 @@ function SignUp() {
     
     //comments
 
+    //comments again
+
     if (localStorage.getItem("CandStorage") != null) {
        // isExist = true;
           //getting Exising values
