@@ -5,16 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap.css">
     <title>JS Demo</title>
 </head>
 
 <body>
-    <h1>JS practice</h1>
+    
 
     <div class="container">
-
+        <h1 class="bg-success">Registration</h1>
          <table class="table table-hover">
              <tr>
                  <td>Name</td>
@@ -26,7 +25,8 @@
             </tr>
 
              <tr>
-                <td colspan="2"><button class="btn btn-primary" id="signup" onclick="SignUp()" >Sign up</button></td>
+                <td><button class="btn btn-primary" id="signup" onclick="SignUp();" >Sign up</button></td>
+                <td><a href="login.html" class="btn btn-venkatesh">Click here to Login</a></td>
             </tr>
  
                 
@@ -34,9 +34,7 @@
          </table>
         
     </div>
-    <div class="container">
-        <a href="login.html" class="btn btn-primary">Click here to Login</a>
-    </div>
+    
 
     <script src="index.js"></script>
 </body>

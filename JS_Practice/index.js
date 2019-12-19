@@ -1,5 +1,10 @@
+function checkAlreadyLoggedIn() {
+    var s=localStorage.getItem("1");
+}
+
+
 var candidates=[];
-var Candidate={name:'',pwd:'',comments:[]};
+var Candidate={name:'',pwd:'',comments:[],isLoggedIn:false};
 
 var StoredComments=[];
 
@@ -49,10 +54,10 @@ function SignUp() {
         alert("Already "+Name+" exists in Storage. Please log in to add comments.." );
         return false;
     }
-            // Candidates = JSON.parse(localStorage.getItem("CandStorage"));
-        // Candidates.push({ name:  Name , pwd: Pwd ,comments:'' });
-        Candidates.push({ name:  Name , pwd: Pwd ,comments:[] });
-        localStorage.setItem("CandStorage",JSON.stringify(Candidates));
+    // Candidates = JSON.parse(localStorage.getItem("CandStorage"));
+    // Candidates.push({ name:  Name , pwd: Pwd ,comments:'' });
+    Candidates.push({ name:  Name , pwd: Pwd ,comments:[],isLoggedIn:false });
+    localStorage.setItem("CandStorage",JSON.stringify(Candidates));
     
   
 
@@ -76,17 +81,20 @@ function LogIN(){
 
     var CandExists=false;
  
-
     if (localStorage.getItem("CandStorage") != null) {
-        Candidates = JSON.parse(localStorage.getItem("CandStorage"));
-        candidates = Candidates;
+        candidates = JSON.parse(localStorage.getItem("CandStorage"));
         //checking duplicates
-        Candidates.forEach(function(val,key){
+
+        var tempCandidates =[];
+        var tempCandidates =candidates;
+
+        candidates.forEach(function(val,key){
             if(Name == val.name)
             {
                 console.log("User found..." );
                 StoredComments = val.comments;
                 Candidate = val;
+                tempCandidates[key].isLoggedIn=true;
                 CandExists=true;
                 return false;
             }
@@ -102,9 +110,21 @@ function LogIN(){
         alert('Candidate not found..');
         return;
     }
+
+    localStorage.setItem("CandStorage",JSON.stringify(tempCandidates));
+
+    var h1user = document.getElementById("h1logged");
+    h1user.innerHTML='Logged in as :'+Name;
+    var creds=[Name,Pwd];
+    localStorage.setItem("1",JSON.stringify(creds));
+
     var divLogin = document.getElementById("LoginDiv");
+    var cardHeader = document.getElementById("cardHeader");
+    var AllComments = document.getElementById("AllComments");
     var cmnts = document.getElementById("cmnts");
     cmnts.setAttribute("style","display:block;");
+    AllComments.setAttribute("style","display:block;");
+    cardHeader.setAttribute("style","display:block;");
 
     divLogin.setAttribute("style","display:none;");
     //filling saved comments 
@@ -128,6 +148,11 @@ function PostComment(){
  //StoredComments
  
  var postedComments = document.getElementById("comments").value;
+ if(postedComments =='')
+ {
+    alert("comments can't be empty..") ;
+    return false;
+ }
  StoredComments.push(postedComments);
  AppendElement();
  document.getElementById("comments").value='';
@@ -145,5 +170,33 @@ function commitToStorage(){
 
     localStorage.setItem("CandStorage",JSON.stringify(candidates));
     alert('Comments Posted..');
+
+}
+function logout() {
+    var Name = document.getElementById("name").value;
+
+    if (localStorage.getItem("CandStorage") != null) {
+        candidates = JSON.parse(localStorage.getItem("CandStorage"));
+        //checking duplicates
+
+        var tempCandidates =[];
+        var tempCandidates =candidates;
+
+        candidates.forEach(function(val,key){
+            if(Name == val.name)
+            {
+                tempCandidates[key].isLoggedIn=false;
+                return false;
+            }
+        })
+    }
+    else
+    {
+        alert('Local Storage is not availble...');
+    }
+    localStorage.removeItem("1");
+    localStorage.setItem("CandStorage",JSON.stringify(candidates));
+    location.reload();
+    console.log("Logged out...");
 
 }
