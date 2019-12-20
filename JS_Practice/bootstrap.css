@@ -10228,3 +10228,32 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+#ALLUL li>button.btnnew{
+padding: 0px 10px;
+    font-size: 11px;
+    display:none;
+    margin-left:10px;
+    margin-bottom: 91px;
+}
+#ALLUL li>button.anybtn{
+  padding: 0px 10px;
+      float: right;
+      font-size: 11px;
+  }
+#ALLUL li>textarea{
+  display: none;
+  }
+  
+  #ALLUL li>ul>li{
+    font-size: 14px;
+    padding: 1px 5px;
+    color: orchid;
+    margin-left: 32px;
+    font-weight: normal;
+
+  }
+
+  #ALLUL li{
+    color: indigo;
+    font-weight: bold;
+  }
