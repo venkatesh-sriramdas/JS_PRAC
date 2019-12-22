@@ -5,12 +5,16 @@ function checkAlreadyLoggedIn() {
 
 var candidates = [];
 //var Candidate = { name: '', pwd: '', comments: {com:[],rep:[]}, isLoggedIn: false };
-var Candidate = { name: '', pwd: '', com:{c:['c1'],r:['r11','r12']}, isLoggedIn: false };
+//var Candidate = { name: '', pwd: '', com:{c:['c1'],r:['r11','r12']}, isLoggedIn: false };
 
+
+var Candidate = {id:0 ,name: '', pwd: '', isLoggedIn: false };
+var Replies =[{id:0,r:[]}];
 
 var StoredComments = [];
-var ComReps ={com:[],rep:[]};
+var ComReps =[{cid:0,comment:'c1',replies:['r1','r2']}];
 
+var CandID = 0;
 function SignUp() {
     var Name = document.getElementById("name").value;
     var Pwd = document.getElementById("pwd").value;
@@ -47,6 +51,7 @@ function SignUp() {
                 isExist = true;
                 return false;
             }
+            CandID +=1;
         })
 
     }
@@ -56,10 +61,13 @@ function SignUp() {
     }
     // Candidates = JSON.parse(localStorage.getItem("CandStorage"));
     // Candidates.push({ name:  Name , pwd: Pwd ,comments:'' });
-    Candidates.push({ name: Name, pwd: Pwd, comments: {com:[],rep:[]}, isLoggedIn: false });
+    //Candidates.push({ name: Name, pwd: Pwd, comments: {com:[],rep:[]}, isLoggedIn: false });
+    
+    Candidates.push({id:CandID, name: Name, pwd: Pwd, isLoggedIn: false });
+
     localStorage.setItem("CandStorage", JSON.stringify(Candidates));
 
-
+    localStorage.setItem("R",JSON.stringify(ComReps));
 
 
     console.log("Local storage created on name of :" + "CandStorage");
@@ -90,8 +98,11 @@ function LogIN() {
         candidates.forEach(function (val, key) {
             if (Name == val.name) {
                 console.log("User found...");
-                StoredComments = val.comments.com;
-                ComReps = val.comments;
+                
+                if (localStorage.getItem("R") != null) {
+                    ComReps = JSON.parse(localStorage.getItem("R"));
+                }
+
                 Candidate = val;
                 tempCandidates[key].isLoggedIn = true;
                 CandExists = true;
@@ -132,39 +143,44 @@ var i =0;
 function AppendElement() {
     var AllUl = document.getElementById("ALLUL");
     AllUl.innerHTML = '';
-    ComReps.com.forEach(function (val, key) {
-        var el = document.createElement("li");
-        el.innerText = val;
-        el.setAttribute("class", "list-group-item mainLi" + key);
-        el.setAttribute("id", "mainLi" + key);
+    ComReps.forEach(function (val, key) {
 
         
-        var input = document.createElement("textarea");
-        input.setAttribute("type", "textarea");
-        input.setAttribute("rows", "4");
-        input.setAttribute("cols", "50");
-        input.setAttribute("id", "inputs" + key);
-        input.setAttribute("class", "form-control inputs" + key);
-        input.setAttribute("placeholder", "Reply");
-        el.appendChild(input);
+            var el = document.createElement("li");
+            el.innerText = val.comment;
+            el.setAttribute("class", "list-group-item mainLi" + key);
+            el.setAttribute("id", "mainLi" + key);
+    
+            
+            var input = document.createElement("textarea");
+            input.setAttribute("type", "textarea");
+            input.setAttribute("rows", "4");
+            input.setAttribute("cols", "50");
+            input.setAttribute("id", "inputs" + key);
+            input.setAttribute("class", "form-control inputs" + key);
+            input.setAttribute("placeholder", "Reply");
+            el.appendChild(input);
+    
+    
+            var btn1 = document.createElement("button");
+            btn1.setAttribute("class", "btn  btn-xs btnnew btn-primary inputs" + key);
+            btn1.setAttribute("onclick", "AppendElementSub(" + key + ")");
+            btn1.innerText = "Post Reply";
+            el.appendChild(btn1);
+    
+    
+            var btn = document.createElement("button");
+            btn.setAttribute("class", "btn  btn-xs btn-primary anybtn anybtn" + key);
+            btn.setAttribute("onclick", "clickedBtn(" + key + ")");
+            btn.innerText = "Reply";
+            el.appendChild(btn);
+    
+            AllUl.appendChild(el);
+            AppendExistingElementSub(val.replies,key);
+         
+       
 
-
-        var btn1 = document.createElement("button");
-        btn1.setAttribute("class", "btn  btn-xs btnnew btn-primary inputs" + key);
-        btn1.setAttribute("onclick", "AppendElementSub(" + key + ")");
-        btn1.innerText = "Post Reply";
-        el.appendChild(btn1);
-
-
-        var btn = document.createElement("button");
-        btn.setAttribute("class", "btn  btn-xs btn-primary anybtn anybtn" + key);
-        btn.setAttribute("onclick", "clickedBtn(" + key + ")");
-        btn.innerText = "Reply";
-        el.appendChild(btn);
-
-        AllUl.appendChild(el);
-
-        AppendExistingElementSub(i);
+       
         i +=1;
 
     })
@@ -175,6 +191,13 @@ function AppendElementSub(key) {
 
     var ul = document.createElement("ul");
 
+    if(document.getElementById("inputs" + key).value =='')
+    {
+        alert('reply can not be empty..');
+        return false;
+
+    }
+
     var el = document.createElement("li");
     el.innerText = document.getElementById("inputs" + key).value;
     document.getElementById("inputs" + key).value = '';
@@ -184,15 +207,15 @@ function AppendElementSub(key) {
 
 }
 
-function AppendExistingElementSub(index) {
+function AppendExistingElementSub(rps,index) {
     var AllUl = document.getElementById("mainLi" + index);
     var ul = document.createElement("ul");
 
-    ComReps.rep.forEach(function (val, key) {
+    rps.forEach(function (val, key) {
         var el = document.createElement("li");
         el.innerText = val;
         el.setAttribute("class", "list-group-item subLiOld" + key);
-        el.setAttribute("id", "mainLi" + key);
+        el.setAttribute("id", "subLi" + key);
         ul.appendChild(el);
         
 
@@ -210,7 +233,7 @@ function PostComment() {
         alert("comments can't be empty..");
         return false;
     }
-    StoredComments.push(postedComments);
+    ComReps.c.push(postedComments);
     AppendElement();
     document.getElementById("comments").value = '';
 
@@ -254,3 +277,4 @@ function logout() {
     console.log("Logged out...");
 
 }
+
